@@ -1,3 +1,4 @@
 virtEnv
 .DS_Store
 *.pyc
+.dbdata

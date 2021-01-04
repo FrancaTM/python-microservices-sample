@@ -1,4 +1,6 @@
-from flask import Flask
+from dataclasses import dataclass
+
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import UniqueConstraint
@@ -10,12 +12,18 @@ CORS(app)
 db = SQLAlchemy(app)
 
 
+@dataclass
 class Product(db.Model):
+    id: int
+    title: str
+    image: str
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=False)
     title = db.Column(db.String(200))
     image = db.Column(db.String(200))
 
 
+@dataclass
 class ProductUser(db.Model):
     """
     docstring
@@ -27,9 +35,9 @@ class ProductUser(db.Model):
     UniqueConstraint('user_id', 'product_id', name='user_product_unique')
 
 
-@app.route('/')
+@app.route('/api/products')
 def index():
-    return 'hellow'
+    return jsonify(Product.query.all())
 
 
 if __name__ == '__main__':
